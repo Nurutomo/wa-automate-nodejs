@@ -154,6 +154,7 @@ declare module WAPI {
   const setGroupDescription: (groupId: string, description: string) => Promise<boolean>;
   const setGroupTitle: (groupId: string, title: string) => Promise<boolean>;
   const sendImageAsSticker: (webpBase64: string, to: string, metadata?: any) => Promise<string | boolean>;
+  const sendRawWebpAsSticker: (webpBase64: string, to: string, metadata?: any) => Promise<string | boolean>;
   const sendStickerAsReply: (webpBase64: string, to: string, messageId: string, metadata?: any) => Promise<string | boolean>;
   const createGroup: (groupName: string, contactId: string|string[]) => Promise<any>;
   const sendCustomProduct: (to: ChatId, image: DataURL, productData: CustomProduct) => Promise<string | boolean>;
@@ -2266,7 +2267,6 @@ public async getStatus(contactId: ContactId) {
   }
 
   /**
-   * [WIP]
    * You can use this to send a raw webp file.
    * @param to ChatId The chat id you want to send the webp sticker to
    * @param webpBase64 Base64 The base64 string of the webp file. Not DataURl
@@ -2274,13 +2274,13 @@ public async getStatus(contactId: ContactId) {
    */
   public async sendRawWebpAsSticker(to: ChatId, webpBase64: Base64, animated : boolean = false){
     let metadata =  {
-  format: 'webp',
-  width: 512,
-  height: 512,
-  animated,
+      format: 'webp',
+      width: 512,
+      height: 512,
+      animated,
     }
     return await this.pup(
-      ({ webpBase64,to, metadata }) => WAPI.sendImageAsSticker(webpBase64,to, metadata),
+      ({ webpBase64,to, metadata }) => WAPI.sendRawWebpAsSticker(webpBase64,to, metadata),
       { webpBase64,to, metadata }
     );
   }
