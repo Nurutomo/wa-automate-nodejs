@@ -2072,6 +2072,23 @@ window.WAPI.sendImageAsSticker = async function (imageBase64,chatId, metadata) {
 };
 
 /**
+ * Send Raw Webp As Sticker
+ * @param {*} imageBase64 A valid webp image is required.
+ * @param {*} chatId '000000000000@c.us'
+ * @param metadata about the image. Based on [sharp metadata](https://sharp.pixelplumbing.com/api-input#metadata)
+ */
+window.WAPI.sendRawWebpAsSticker = async function (rawWebpBase64,chatId, metadata) {
+    let metatype = 'image/webp'
+    if (metadata.animated) metatype = 'video/webp'
+    let mediaBlob = await window.WAPI.base64ImageToFile(
+        'data:'+metatype+';base64,'+rawWebpBase64,q
+        'file.webp'
+    );
+    let encrypted = await window.WAPI.encryptAndUploadFile("sticker", mediaBlob);
+    return await window.WAPI._sendSticker(encrypted, chatId, metadata);
+};
+
+/**
 This will dump all possible stickers into the chat. ONLY FOR TESTING. THIS IS REALLY ANNOYING!!
  */
 window.WAPI._STICKERDUMP = async function (chatId) {
